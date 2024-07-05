@@ -13,6 +13,12 @@ RUN apt-get update && apt-get install -y \
     libssl-dev \
     make \
     docker.io \
+    wget \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install wkhtmltopdf from the official repository
+RUN apt-get update && apt-get install -y \
     wkhtmltopdf \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
@@ -25,5 +31,4 @@ COPY ./run.py ./run.py
 COPY ./entrypoint.sh /entrypoint.sh
 
 RUN chmod +x /entrypoint.sh
-
 ENTRYPOINT ["/entrypoint.sh"]
