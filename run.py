@@ -3,11 +3,16 @@ import os
 import base64
 import requests
 import imgkit
+import shutil
 
 
 
 def generate_image_from_html(html_content, output_filename):
-    config = imgkit.config(wkhtmltoimage='/usr/bin/wkhtmltoimage')
+    wkhtmltoimage_path = shutil.which('wkhtmltoimage')
+    if not wkhtmltoimage_path:
+        raise FileNotFoundError("The wkhtmltoimage executable wasn't found")
+
+    config = imgkit.config(wkhtmltoimage=wkhtmltoimage_path)
     imgkit.from_string(html_content, output_filename, config=config)
     return output_filename
 
