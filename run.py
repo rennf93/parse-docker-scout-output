@@ -7,7 +7,8 @@ import imgkit
 
 
 def generate_image_from_html(html_content, output_filename):
-    imgkit.from_string(html_content, output_filename)
+    config = imgkit.config(wkhtmltoimage='/usr/bin/wkhtmltoimage')
+    imgkit.from_string(html_content, output_filename, config=config)
     return output_filename
 
 
