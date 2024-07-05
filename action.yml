@@ -1,0 +1,34 @@
+name: 'Parse Docker Scout Output'
+description: "A GitHub Action to parse Docker Scout's Output"
+author: 'Renzo Franceschini'
+
+inputs:
+  GITHUB_REPOSITORY:
+    description: 'Target GitHub Repo to upload imagesto'
+    required: true
+  GITHUB_REF_NAME:
+    description: "Target Repo's Branch to upload images to"
+    required: true
+  REPO_FOLDER:
+    description: 'Folder name in the repository to upload images to'
+    required: true
+  RECOMMENDATIONS:
+    description: 'Docker Scout recommendations HTML output'
+    required: true
+  CVES_OUTPUT:
+    description: 'Docker Scout CVEs HTML output'
+    required: false
+  SBOM_OUTPUT:
+    description: 'Docker Scout SBOM HTML output'
+    required: false
+  IMAGE_DETAILS:
+    description: 'Docker image details JSON'
+    required: false
+
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+
+branding:
+  icon: 'book-open'
+  color: 'black'
