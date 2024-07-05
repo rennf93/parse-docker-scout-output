@@ -23,6 +23,12 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+# Install wkhtmltoimage from the official repository
+RUN apt-get update && apt-get install -y \
+    wkhtmltoimage \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
 COPY ./requirements.pip ./requirements.pip
 RUN pip install --upgrade pip && \
     pip install -r requirements.pip
