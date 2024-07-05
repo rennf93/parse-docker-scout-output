@@ -11,20 +11,7 @@ RUN apt-get update && apt-get install -y \
     musl-dev \
     libffi-dev \
     libssl-dev \
-    make \
-    docker.io \
-    wget \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
-
-# Install wkhtmltopdf from the official repository
-RUN apt-get update && apt-get install -y \
-    wkhtmltopdf \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
-
-# Verify the installation path of wkhtmltoimage
-RUN which wkhtmltoimage
+    make 
 
 COPY ./requirements.pip ./requirements.pip
 RUN pip install --upgrade pip && \

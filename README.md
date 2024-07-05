@@ -1,16 +1,16 @@
 # parse-docker-scout-output
 
-`parse-docker-scout-output` is a GitHub Action designed to parse the output from Docker Scout. It processes Docker Scout's recommendations, CVEs, and SBOM outputs, and uploads the results as images to your GitHub repository. This action is ideal for enhancing the visibility of Docker image security within your projects.
+`parse-docker-scout-output` is a GitHub Action designed to parse the output from Docker Scout. It processes Docker Scout's recommendations, CVEs, and SBOM outputs, and uploads the results as PDF to your GitHub repository. This action is ideal for enhancing the visibility of Docker image security within your projects.
 
 ## Features
 
 - Parses Docker Scout recommendations, CVEs, and SBOM outputs
-- Uploads the results as images to your GitHub repository
+- Uploads the results as PDF to your GitHub repository
 - Sets environment variables with the URLs of these images
 
 ## Outputs
 
-This action does not produce direct outputs but uploads images to the repository and sets environment variables with the URLs of these images.
+This action does not produce direct outputs but uploads PDFs to the repository and sets environment variables with the URLs of these PDFs.
 
 ## Usage
 

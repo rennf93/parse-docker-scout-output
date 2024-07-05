@@ -2,18 +2,15 @@ import json
 import os
 import base64
 import requests
-import imgkit
-import shutil
+from xhtml2pdf import pisa
 
 
 
 def generate_image_from_html(html_content, output_filename):
-    wkhtmltoimage_path = shutil.which('wkhtmltoimage')
-    if not wkhtmltoimage_path:
-        raise FileNotFoundError("The wkhtmltoimage executable wasn't found")
-
-    config = imgkit.config(wkhtmltoimage=wkhtmltoimage_path)
-    imgkit.from_string(html_content, output_filename, config=config)
+    with open(output_filename, "wb") as output_file:
+        pisa_status = pisa.CreatePDF(html_content, dest=output_file)
+        if pisa_status.err:
+            raise Exception("Error generating PDF")
     return output_filename
 
 
@@ -41,19 +38,19 @@ def upload_image_to_github(image_path, repo, token, branch, folder):
 
 
 def parse_recommendations(recommendations, repo, token, branch, folder):
-    image_path = generate_image_from_html(recommendations, 'recommendations_output.png')
+    image_path = generate_image_from_html(recommendations, 'recommendations_output.pdf')
     return upload_image_to_github(image_path, repo, token, branch, folder)
 
 
 
 def parse_cves(cves_output, repo, token, branch, folder):
-    image_path = generate_image_from_html(cves_output, 'cves_output.png')
+    image_path = generate_image_from_html(cves_output, 'cves_output.pdf')
     return upload_image_to_github(image_path, repo, token, branch, folder)
 
 
 
 def parse_sbom(sbom_output, repo, token, branch, folder):
-    image_path = generate_image_from_html(sbom_output, 'sbom_output.png')
+    image_path = generate_image_from_html(sbom_output, 'sbom_output.pdf')
     return upload_image_to_github(image_path, repo, token, branch, folder)
 
 
