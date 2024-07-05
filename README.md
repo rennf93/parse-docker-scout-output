@@ -20,10 +20,10 @@ To use this action in your workflow, add the following step:
 - name: Parse Docker Scout Output
   uses: rennf93/parse-docker-scout-output@v1
   with:
-    GITHUB_REPOSITORY: ${{ secrets.GITHUB_REPOSITORY }}
-    GITHUB_REF_NAME: ${{ secrets.GITHUB_REF_NAME }}
+    TARGET_REPO: ${{ secrets.TARGET_REPO }}
+    TARGET_BRANCH: ${{ secrets.TARGET_BRANCH }}
     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    REPO_FOLDER: ${{ secrets.REPO_FOLDER }}
+    TARGET_FOLDER: ${{ secrets.TARGET_FOLDER }}
     RECOMMENDATIONS: ${{ steps.docker-scout.outputs.recommendations }}
     CVES_OUTPUT: ${{ steps.docker-scout.outputs.cves }}
     SBOM_OUTPUT: ${{ steps.docker-scout.outputs.sbom }}
@@ -34,10 +34,10 @@ To use this action in your workflow, add the following step:
 
 | Input Name         | Description                              | Required |
 |--------------------|------------------------------------------|----------|
-| `GITHUB_REPOSITORY`| Target GitHub Repo to upload images to   | true     |
-| `GITHUB_REF_NAME`  | Target Repo's Branch to upload images to | true     |
+| `TARGET_REPO`| Target GitHub Repo to upload images to   | true     |
+| `TARGET_BRANCH`  | Target Repo's Branch to upload images to | true     |
 | `GITHUB_TOKEN`     | GitHub token for authentication          | true     |
-| `REPO_FOLDER`      | Folder in the repository to upload images to | true     |
+| `TARGET_FOLDER`      | Folder in the repository to upload images to | true     |
 | `RECOMMENDATIONS`  | Docker Scout recommendations HTML output | true     |
 | `CVES_OUTPUT`      | Docker Scout CVEs HTML output            | false    |
 | `SBOM_OUTPUT`      | Docker Scout SBOM HTML output            | false    |
@@ -71,10 +71,10 @@ jobs:
       - name: Parse Docker Scout Output
         uses: rennf93/parse-docker-scout-output@v1.0
         with:
-          GITHUB_REPOSITORY: ${{ secrets.GITHUB_REPOSITORY }}
-          GITHUB_REF_NAME: ${{ secrets.GITHUB_REF_NAME }}
+          TARGET_REPO: ${{ secrets.TARGET_REPO }}
+          TARGET_BRANCH: ${{ secrets.TARGET_BRANCH }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REPO_FOLDER: ${{ secrets.REPO_FOLDER }}
+          TARGET_FOLDER: ${{ secrets.TARGET_FOLDER }}
           RECOMMENDATIONS: ${{ steps.docker-scout.outputs.recommendations }}
           CVES_OUTPUT: ${{ steps.docker-scout.outputs.cves }}
           SBOM_OUTPUT: ${{ steps.docker-scout.outputs.sbom }}

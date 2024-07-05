@@ -3,13 +3,13 @@ description: "A GitHub Action to parse Docker Scout's Output"
 author: 'Renzo Franceschini'
 
 inputs:
-  GITHUB_REPOSITORY:
+  TARGET_REPO:
     description: 'Target GitHub Repo to upload imagesto'
     required: true
-  GITHUB_REF_NAME:
+  TARGET_BRANCH:
     description: "Target Repo's Branch to upload images to"
     required: true
-  REPO_FOLDER:
+  TARGET_FOLDER:
     description: 'Folder name in the repository to upload images to'
     required: true
   RECOMMENDATIONS:

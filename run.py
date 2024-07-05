@@ -76,10 +76,10 @@ def main():
     cves_output = os.getenv('CVES_OUTPUT')
     sbom_output = os.getenv('SBOM_OUTPUT')
     image_details = os.getenv('IMAGE_DETAILS')
-    repo = os.getenv('GITHUB_REPOSITORY')
+    repo = os.getenv('TARGET_REPO')
     token = os.getenv('GITHUB_TOKEN')
-    branch = os.getenv('GITHUB_REF_NAME')
-    folder = os.getenv('REPO_FOLDER')
+    branch = os.getenv('TARGET_BRANCH')
+    folder = os.getenv('TARGET_FOLDER')
 
     parsed_recommendations = parse_recommendations(recommendations, repo, token, branch, folder)
     parsed_cves = parse_cves(cves_output, repo, token, branch, folder)
