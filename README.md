@@ -1,0 +1,1 @@
+# parse-docker-scout-output
