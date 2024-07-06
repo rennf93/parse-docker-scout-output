@@ -3,6 +3,9 @@ description: "A GitHub Action to parse Docker Scout's Output"
 author: 'Renzo Franceschini'
 
 inputs:
+  PAT:
+    description: 'Personal Access Token to authenticate'
+    required: true
   TARGET_REPO:
     description: 'Target GitHub Repo to upload images to'
     required: true

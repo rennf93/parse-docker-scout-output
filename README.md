@@ -20,6 +20,7 @@ To use this action in your workflow, add the following step:
 - name: Parse Docker Scout Output
   uses: rennf93/parse-docker-scout-output@v1
   with:
+    PAT: ${{ secrets.PAT }}
     TARGET_REPO: ${{ secrets.TARGET_REPO }}
     TARGET_BRANCH: ${{ secrets.TARGET_BRANCH }}
     TARGET_FOLDER: ${{ secrets.TARGET_FOLDER }}
@@ -27,8 +28,6 @@ To use this action in your workflow, add the following step:
     CVES_OUTPUT: ${{ steps.docker-scout.outputs.cves }}
     SBOM_OUTPUT: ${{ steps.docker-scout.outputs.sbom }}
     IMAGE_DETAILS: ${{ steps.docker-scout.outputs.image_details }}
-  env:
-    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ## Inputs
@@ -42,7 +41,7 @@ To use this action in your workflow, add the following step:
 | `CVES_OUTPUT`      | Docker Scout CVEs HTML output            | false    |
 | `SBOM_OUTPUT`      | Docker Scout SBOM HTML output            | false    |
 | `IMAGE_DETAILS`    | Docker image details JSON                | false    |
-| `GITHUB_TOKEN`     | GitHub token for authentication          | true     |
+| `PAT`     | GitHub Personal Access Token for authentication          | true     |
 
 ## Example Workflow
 
@@ -72,6 +71,7 @@ jobs:
       - name: Parse Docker Scout Output
         uses: rennf93/parse-docker-scout-output@v1.0
         with:
+          PAT: ${{ secrets.PAT }}
           TARGET_REPO: ${{ secrets.TARGET_REPO }}
           TARGET_BRANCH: ${{ secrets.TARGET_BRANCH }}
           TARGET_FOLDER: ${{ secrets.TARGET_FOLDER }}
@@ -79,8 +79,6 @@ jobs:
           CVES_OUTPUT: ${{ steps.docker-scout.outputs.cves }}
           SBOM_OUTPUT: ${{ steps.docker-scout.outputs.sbom }}
           IMAGE_DETAILS: ${{ steps.docker-scout.outputs.image_details }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ## License

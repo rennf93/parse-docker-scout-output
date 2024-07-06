@@ -89,7 +89,7 @@ def main():
     sbom_output = os.getenv('SBOM_OUTPUT')
     image_details = os.getenv('IMAGE_DETAILS')
     repo = os.getenv('TARGET_REPO')
-    token = os.getenv('GITHUB_TOKEN')
+    token = os.getenv('PAT')
     branch = os.getenv('TARGET_BRANCH')
     folder = os.getenv('TARGET_FOLDER')
 

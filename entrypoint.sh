@@ -1,6 +1,7 @@
 #!/bin/sh -l
 
 # Extract inputs from 'with' GitHub context using the INPUT_ prefix
+export PAT="${PAT}"
 export TARGET_REPO="${TARGET_REPO}"
 export TARGET_BRANCH="${TARGET_BRANCH}"
 export TARGET_FOLDER="${TARGET_FOLDER}"
@@ -10,6 +11,11 @@ export SBOM_OUTPUT="${INPUT_SBOM_OUTPUT}"
 export IMAGE_DETAILS="${INPUT_IMAGE_DETAILS}"
 
 # Check if required inputs are provided
+if [ -z "$PAT" ]; then
+  echo "PAT is a required input and must be set."
+  exit 1
+fi
+
 if [ -z "$TARGET_REPO" ]; then
   echo "TARGET_REPO is a required input and must be set."
   exit 1
