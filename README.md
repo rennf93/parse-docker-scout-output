@@ -22,12 +22,13 @@ To use this action in your workflow, add the following step:
   with:
     TARGET_REPO: ${{ secrets.TARGET_REPO }}
     TARGET_BRANCH: ${{ secrets.TARGET_BRANCH }}
-    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     TARGET_FOLDER: ${{ secrets.TARGET_FOLDER }}
     RECOMMENDATIONS: ${{ steps.docker-scout.outputs.recommendations }}
     CVES_OUTPUT: ${{ steps.docker-scout.outputs.cves }}
     SBOM_OUTPUT: ${{ steps.docker-scout.outputs.sbom }}
     IMAGE_DETAILS: ${{ steps.docker-scout.outputs.image_details }}
+  env:
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ## Inputs
@@ -36,12 +37,12 @@ To use this action in your workflow, add the following step:
 |--------------------|------------------------------------------|----------|
 | `TARGET_REPO`| Target GitHub Repo to upload images to   | true     |
 | `TARGET_BRANCH`  | Target Repo's Branch to upload images to | true     |
-| `GITHUB_TOKEN`     | GitHub token for authentication          | true     |
 | `TARGET_FOLDER`      | Folder in the repository to upload images to | true     |
 | `RECOMMENDATIONS`  | Docker Scout recommendations HTML output | true     |
 | `CVES_OUTPUT`      | Docker Scout CVEs HTML output            | false    |
 | `SBOM_OUTPUT`      | Docker Scout SBOM HTML output            | false    |
 | `IMAGE_DETAILS`    | Docker image details JSON                | false    |
+| `GITHUB_TOKEN`     | GitHub token for authentication          | true     |
 
 ## Example Workflow
 
@@ -73,12 +74,13 @@ jobs:
         with:
           TARGET_REPO: ${{ secrets.TARGET_REPO }}
           TARGET_BRANCH: ${{ secrets.TARGET_BRANCH }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TARGET_FOLDER: ${{ secrets.TARGET_FOLDER }}
           RECOMMENDATIONS: ${{ steps.docker-scout.outputs.recommendations }}
           CVES_OUTPUT: ${{ steps.docker-scout.outputs.cves }}
           SBOM_OUTPUT: ${{ steps.docker-scout.outputs.sbom }}
           IMAGE_DETAILS: ${{ steps.docker-scout.outputs.image_details }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ## License

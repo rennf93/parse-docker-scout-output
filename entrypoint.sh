@@ -1,7 +1,6 @@
 #!/bin/sh -l
 
 # Extract inputs from 'with' GitHub context using the INPUT_ prefix
-export GITHUB_TOKEN="${GITHUB_TOKEN}"
 export TARGET_REPO="${TARGET_REPO}"
 export TARGET_BRANCH="${TARGET_BRANCH}"
 export TARGET_FOLDER="${TARGET_FOLDER}"
