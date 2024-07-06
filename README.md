@@ -69,7 +69,7 @@ jobs:
           image: <image-name>:<image-tag>
 
       - name: Parse Docker Scout Output
-        uses: rennf93/parse-docker-scout-output@v1.0
+        uses: rennf93/parse-docker-scout-output@v1.5
         with:
           PAT: ${{ secrets.PAT }}
           TARGET_REPO: ${{ secrets.TARGET_REPO }}
