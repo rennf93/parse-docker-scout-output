@@ -17,13 +17,13 @@ inputs:
     required: true
   CVES_OUTPUT:
     description: 'Docker Scout CVEs HTML output'
-    required: false
+    required: true
   SBOM_OUTPUT:
     description: 'Docker Scout SBOM HTML output'
-    required: false
+    required: true
   IMAGE_DETAILS:
     description: 'Docker image details JSON'
-    required: false
+    required: true
 
 runs:
   using: 'docker'

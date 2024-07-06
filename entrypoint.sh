@@ -21,13 +21,28 @@ if [ -z "$TARGET_BRANCH" ]; then
   exit 1
 fi
 
+if [ -z "$TARGET_FOLDER" ]; then
+  echo "TARGET_FOLDER is a required input and must be set."
+  exit 1
+fi
+
 if [ -z "$RECOMMENDATIONS" ]; then
   echo "RECOMMENDATIONS is a required input and must be set."
   exit 1
 fi
 
-if [ -z "$FOLDER_NAME" ]; then
-  echo "FOLDER_NAME is a required input and must be set."
+if [ -z "$CVES_OUTPUT" ]; then
+  echo "CVES_OUTPUT is a required input and must be set."
+  exit 1
+fi
+
+if [ -z "$SBOM_OUTPUT" ]; then
+  echo "SBOM_OUTPUT is a required input and must be set."
+  exit 1
+fi
+
+if [ -z "$IMAGE_DETAILS" ]; then
+  echo "IMAGE_DETAILS is a required input and must be set."
   exit 1
 fi
 
