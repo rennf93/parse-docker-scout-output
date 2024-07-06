@@ -6,7 +6,17 @@ from xhtml2pdf import pisa
 
 
 
-def generate_image_from_html(html_content, output_filename):
+def generate_pdf_from_html(html_content, output_filename):
+    with open(output_filename, "wb") as output_file:
+        pisa_status = pisa.CreatePDF(html_content, dest=output_file)
+        if pisa_status.err:
+            raise Exception("Error generating PDF")
+    return output_filename
+
+
+
+def generate_pdf_from_json(json_content, output_filename):
+    html_content = f"<html><body><pre>{json.dumps(json_content, indent=4)}</pre></body></html>"
     with open(output_filename, "wb") as output_file:
         pisa_status = pisa.CreatePDF(html_content, dest=output_file)
         if pisa_status.err:
@@ -38,24 +48,25 @@ def upload_image_to_github(image_path, repo, token, branch, folder):
 
 
 def parse_recommendations(recommendations, repo, token, branch, folder):
-    image_path = generate_image_from_html(recommendations, 'recommendations_output.pdf')
+    image_path = generate_pdf_from_html(recommendations, 'recommendations_output.pdf')
     return upload_image_to_github(image_path, repo, token, branch, folder)
 
 
 
 def parse_cves(cves_output, repo, token, branch, folder):
-    image_path = generate_image_from_html(cves_output, 'cves_output.pdf')
+    image_path = generate_pdf_from_html(cves_output, 'cves_output.pdf')
     return upload_image_to_github(image_path, repo, token, branch, folder)
 
 
 
 def parse_sbom(sbom_output, repo, token, branch, folder):
-    image_path = generate_image_from_html(sbom_output, 'sbom_output.pdf')
+    sbom_json = json.loads(sbom_output)
+    image_path = generate_pdf_from_json(sbom_json, 'sbom_output.pdf')
     return upload_image_to_github(image_path, repo, token, branch, folder)
 
 
 
-def parse_image_details(image_details):
+def parse_image_details(image_details, repo, token, branch, folder):
     image_details_json = json.loads(image_details)
     parsed_details = []
     for image in image_details_json:
@@ -67,7 +78,8 @@ def parse_image_details(image_details):
             "Vulnerabilities": image.get("Config", {}).get("Labels", {}).get("vulnerabilities")
         }
         parsed_details.append(details)
-    return parsed_details
+    image_path = generate_pdf_from_json(parsed_details, 'image_details.pdf')
+    return upload_image_to_github(image_path, repo, token, branch, folder)
 
 
 
@@ -81,16 +93,19 @@ def main():
     branch = os.getenv('TARGET_BRANCH')
     folder = os.getenv('TARGET_FOLDER')
 
+    if not all([recommendations, cves_output, sbom_output, image_details, repo, token, branch, folder]):
+        raise ValueError("One or more environment variables are missing")
+
     parsed_recommendations = parse_recommendations(recommendations, repo, token, branch, folder)
     parsed_cves = parse_cves(cves_output, repo, token, branch, folder)
     parsed_sbom = parse_sbom(sbom_output, repo, token, branch, folder)
-    parsed_image_details = parse_image_details(image_details)
+    parsed_image_details = parse_image_details(image_details, repo, token, branch, folder)
 
     with open(os.getenv('GITHUB_ENV'), 'a') as env_file:
         env_file.write(f"PARSED_RECOMMENDATIONS_IMAGE={parsed_recommendations}\n")
         env_file.write(f"PARSED_CVES_IMAGE={parsed_cves}\n")
         env_file.write(f"PARSED_SBOM_IMAGE={parsed_sbom}\n")
-        env_file.write(f"PARSED_IMAGE_DETAILS={json.dumps(parsed_image_details)}\n")
+        env_file.write(f"PARSED_IMAGE_DETAILS={parsed_image_details}\n")
 
 
 

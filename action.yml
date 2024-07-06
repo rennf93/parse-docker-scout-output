@@ -4,7 +4,7 @@ author: 'Renzo Franceschini'
 
 inputs:
   TARGET_REPO:
-    description: 'Target GitHub Repo to upload imagesto'
+    description: 'Target GitHub Repo to upload images to'
     required: true
   TARGET_BRANCH:
     description: "Target Repo's Branch to upload images to"
@@ -19,7 +19,7 @@ inputs:
     description: 'Docker Scout CVEs HTML output'
     required: true
   SBOM_OUTPUT:
-    description: 'Docker Scout SBOM HTML output'
+    description: 'Docker Scout SBOM JSON output'
     required: true
   IMAGE_DETAILS:
     description: 'Docker image details JSON'

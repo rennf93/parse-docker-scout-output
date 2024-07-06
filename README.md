@@ -66,7 +66,7 @@ jobs:
         id: docker-scout
         uses: docker/scout-action@v1.9.3
         with:
-          command: cves,recommendations,compare
+          command: cves,recommendations,compare,sbom
           image: <image-name>:<image-tag>
 
       - name: Parse Docker Scout Output

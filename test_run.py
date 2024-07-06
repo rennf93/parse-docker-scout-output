@@ -2,7 +2,7 @@ import unittest
 import json
 import os
 from unittest.mock import patch, mock_open
-from run import generate_image_from_html, upload_image_to_github, parse_recommendations, parse_cves, parse_sbom, parse_image_details
+from run import generate_pdf_from_html, generate_pdf_from_json, upload_image_to_github, parse_recommendations, parse_cves, parse_sbom, parse_image_details
 
 class TestRunFunctions(unittest.TestCase):
 
@@ -12,18 +12,19 @@ class TestRunFunctions(unittest.TestCase):
             "test_output.pdf",
             "recommendations_output.pdf",
             "cves_output.pdf",
-            "sbom_output.pdf"
+            "sbom_output.pdf",
+            "image_details.pdf"
         ]
         for file in test_files:
             if os.path.exists(file):
                 os.remove(file)
 
     @patch('xhtml2pdf.pisa.CreatePDF')
-    def test_generate_image_from_html(self, mock_create_pdf):
+    def test_generate_pdf_from_html(self, mock_create_pdf):
         mock_create_pdf.return_value.err = False
         html_content = "<h2>Test HTML</h2>"
         output_filename = "test_output.pdf"
-        result = generate_image_from_html(html_content, output_filename)
+        result = generate_pdf_from_html(html_content, output_filename)
         mock_create_pdf.assert_called_once()
         self.assertEqual(result, output_filename)
 
@@ -67,7 +68,7 @@ class TestRunFunctions(unittest.TestCase):
     @patch('run.upload_image_to_github')
     def test_parse_sbom(self, mock_upload):
         mock_upload.return_value = "https://example.com/sbom_output.pdf"
-        sbom_output = "<h2>SBOM</h2>"
+        sbom_output = json.dumps({"key": "value"})
         repo = "rennf93/project-assets"
         token = "test_token"
         branch = "master"
@@ -75,7 +76,9 @@ class TestRunFunctions(unittest.TestCase):
         result = parse_sbom(sbom_output, repo, token, branch, folder)
         self.assertEqual(result, "https://example.com/sbom_output.pdf")
 
-    def test_parse_image_details(self):
+    @patch('run.upload_image_to_github')
+    def test_parse_image_details(self, mock_upload):
+        mock_upload.return_value = "https://example.com/image_details.pdf"
         image_details = json.dumps([{
             "Id": "123",
             "RepoTags": ["test_repo:latest"],
@@ -87,15 +90,12 @@ class TestRunFunctions(unittest.TestCase):
                 }
             }
         }])
-        result = parse_image_details(image_details)
-        expected = [{
-            "Id": "123",
-            "RepoTags": ["test_repo:latest"],
-            "RepoDigests": ["sha256:abc123"],
-            "Size": 123456,
-            "Vulnerabilities": "5"
-        }]
-        self.assertEqual(result, expected)
+        repo = "rennf93/project-assets"
+        token = "test_token"
+        branch = "master"
+        folder = "tests"
+        result = parse_image_details(image_details, repo, token, branch, folder)
+        self.assertEqual(result, "https://example.com/image_details.pdf")
 
 if __name__ == '__main__':
     unittest.main()
