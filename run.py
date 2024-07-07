@@ -3,26 +3,24 @@ import os
 import base64
 import requests
 from xhtml2pdf import pisa
-
+from requests.exceptions import HTTPError
 
 
 def generate_pdf_from_html(html_content, output_filename):
     with open(output_filename, "wb") as output_file:
-        pisa_status = pisa.CreatePDF(html_content, dest=output_file)
+        pisa_status = pisa.CreatePDF(html_content.encode('utf-8'), dest=output_file)
         if pisa_status.err:
             raise Exception("Error generating PDF")
     return output_filename
-
 
 
 def generate_pdf_from_json(json_content, output_filename):
     html_content = f"<html><body><pre>{json.dumps(json_content, indent=4)}</pre></body></html>"
     with open(output_filename, "wb") as output_file:
-        pisa_status = pisa.CreatePDF(html_content, dest=output_file)
+        pisa_status = pisa.CreatePDF(html_content.encode('utf-8'), dest=output_file)
         if pisa_status.err:
             raise Exception("Error generating PDF")
     return output_filename
-
 
 
 def upload_image_to_github(image_path, repo, token, branch, folder):
@@ -39,6 +37,18 @@ def upload_image_to_github(image_path, repo, token, branch, folder):
         "content": base64.b64encode(image_data).decode('utf-8'),
         "branch": branch
     }
+
+    # Check if the file already exists
+    try:
+        response = requests.get(url, headers=headers)
+        if response.status_code == 200:
+            # File exists, update it
+            sha = response.json()['sha']
+            data['sha'] = sha
+    except HTTPError as e:
+        if e.response.status_code != 404:
+            raise
+
     response = requests.put(url, headers=headers, json=data)
     response.raise_for_status()
 
@@ -46,11 +56,9 @@ def upload_image_to_github(image_path, repo, token, branch, folder):
     return pages_url
 
 
-
 def parse_recommendations(recommendations, repo, token, branch, folder):
     image_path = generate_pdf_from_html(recommendations, 'recommendations_output.pdf')
     return upload_image_to_github(image_path, repo, token, branch, folder)
-
 
 
 def parse_cves(cves_output, repo, token, branch, folder):
@@ -58,12 +66,10 @@ def parse_cves(cves_output, repo, token, branch, folder):
     return upload_image_to_github(image_path, repo, token, branch, folder)
 
 
-
 def parse_sbom(sbom_output, repo, token, branch, folder):
     sbom_json = json.loads(sbom_output)
     image_path = generate_pdf_from_json(sbom_json, 'sbom_output.pdf')
     return upload_image_to_github(image_path, repo, token, branch, folder)
-
 
 
 def parse_image_details(image_details, repo, token, branch, folder):
@@ -80,7 +86,6 @@ def parse_image_details(image_details, repo, token, branch, folder):
         parsed_details.append(details)
     image_path = generate_pdf_from_json(parsed_details, 'image_details.pdf')
     return upload_image_to_github(image_path, repo, token, branch, folder)
-
 
 
 def main():
@@ -106,7 +111,6 @@ def main():
         env_file.write(f"PARSED_CVES_IMAGE={parsed_cves}\n")
         env_file.write(f"PARSED_SBOM_IMAGE={parsed_sbom}\n")
         env_file.write(f"PARSED_IMAGE_DETAILS={parsed_image_details}\n")
-
 
 
 if __name__ == "__main__":
