@@ -72,8 +72,7 @@ def parse_image_details(image_details, repo, token, branch, folder):
             "Id": image.get("Id"),
             "RepoTags": image.get("RepoTags"),
             "RepoDigests": image.get("RepoDigests"),
-            "Size": image.get("Size"),
-            "Vulnerabilities": image.get("Config", {}).get("Labels", {}).get("vulnerabilities", "N/A")
+            "Size": image.get("Size")
         }
         parsed_details.append(details)
     timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
