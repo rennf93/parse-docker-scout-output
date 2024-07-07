@@ -3,7 +3,7 @@ import os
 import base64
 import requests
 from xhtml2pdf import pisa
-from requests.exceptions import HTTPError
+from datetime import datetime
 
 
 def generate_pdf_from_html(html_content, output_filename):
@@ -38,17 +38,6 @@ def upload_image_to_github(image_path, repo, token, branch, folder):
         "branch": branch
     }
 
-    # Check if the file already exists
-    try:
-        response = requests.get(url, headers=headers)
-        if response.status_code == 200:
-            # File exists, update it
-            sha = response.json()['sha']
-            data['sha'] = sha
-    except HTTPError as e:
-        if e.response.status_code != 404:
-            raise
-
     response = requests.put(url, headers=headers, json=data)
     response.raise_for_status()
 
@@ -57,18 +46,21 @@ def upload_image_to_github(image_path, repo, token, branch, folder):
 
 
 def parse_recommendations(recommendations, repo, token, branch, folder):
-    image_path = generate_pdf_from_html(recommendations, 'recommendations_output.pdf')
+    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+    image_path = generate_pdf_from_html(recommendations, f'recommendations_output_{timestamp}.pdf')
     return upload_image_to_github(image_path, repo, token, branch, folder)
 
 
 def parse_cves(cves_output, repo, token, branch, folder):
-    image_path = generate_pdf_from_html(cves_output, 'cves_output.pdf')
+    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+    image_path = generate_pdf_from_html(cves_output, f'cves_output_{timestamp}.pdf')
     return upload_image_to_github(image_path, repo, token, branch, folder)
 
 
 def parse_sbom(sbom_output, repo, token, branch, folder):
     sbom_json = json.loads(sbom_output)
-    image_path = generate_pdf_from_json(sbom_json, 'sbom_output.pdf')
+    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+    image_path = generate_pdf_from_json(sbom_json, f'sbom_output_{timestamp}.pdf')
     return upload_image_to_github(image_path, repo, token, branch, folder)
 
 
@@ -84,7 +76,8 @@ def parse_image_details(image_details, repo, token, branch, folder):
             "Vulnerabilities": image.get("Config", {}).get("Labels", {}).get("vulnerabilities")
         }
         parsed_details.append(details)
-    image_path = generate_pdf_from_json(parsed_details, 'image_details.pdf')
+    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+    image_path = generate_pdf_from_json(parsed_details, f'image_details_{timestamp}.pdf')
     return upload_image_to_github(image_path, repo, token, branch, folder)
 
 
