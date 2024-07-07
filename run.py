@@ -65,15 +65,15 @@ def parse_sbom(sbom_output, repo, token, branch, folder):
 
 
 def parse_image_details(image_details, repo, token, branch, folder):
-    image_details_json = json.loads(image_details)
+    image_details_list = json.loads(image_details)
     parsed_details = []
-    for image in image_details_json:
+    for image in image_details_list:
         details = {
             "Id": image.get("Id"),
             "RepoTags": image.get("RepoTags"),
             "RepoDigests": image.get("RepoDigests"),
             "Size": image.get("Size"),
-            "Vulnerabilities": image.get("Config", {}).get("Labels", {}).get("vulnerabilities")
+            "Vulnerabilities": image.get("Config", {}).get("Labels", {}).get("vulnerabilities", "N/A")
         }
         parsed_details.append(details)
     timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
