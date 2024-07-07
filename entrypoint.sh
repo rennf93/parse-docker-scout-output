@@ -51,5 +51,11 @@ if [ -z "$IMAGE_DETAILS" ]; then
   exit 1
 fi
 
-# Run the Python script with the provided inputs
-python /usr/src/app/run.py
+# Run the Python script with the provided inputs and capture the output
+output=$(python /usr/src/app/run.py)
+
+# Mask the output in the logs
+echo "::add-mask::$output"
+
+# Set the output as environment variables
+echo "$output" >> $GITHUB_ENV

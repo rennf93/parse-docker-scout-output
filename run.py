@@ -98,12 +98,12 @@ def main():
     parsed_sbom = parse_sbom(sbom_output, repo, token, branch, folder)
     parsed_image_details = parse_image_details(image_details, repo, token, branch, folder)
 
-    with open(os.getenv('GITHUB_ENV'), 'a') as env_file:
-        env_file.write(f"PARSED_RECOMMENDATIONS_IMAGE={parsed_recommendations}\n")
-        env_file.write(f"PARSED_CVES_IMAGE={parsed_cves}\n")
-        env_file.write(f"PARSED_SBOM_IMAGE={parsed_sbom}\n")
-        env_file.write(f"PARSED_IMAGE_DETAILS={parsed_image_details}\n")
-
+    # Output the URLs in a format that can be captured by the shell script
+    with open(os.getenv('GITHUB_OUTPUT'), 'a') as output_file:
+        print(f"PARSED_RECOMMENDATIONS_IMAGE={parsed_recommendations}", file=output_file)
+        print(f"PARSED_CVES_IMAGE={parsed_cves}", file=output_file)
+        print(f"PARSED_SBOM_IMAGE={parsed_sbom}", file=output_file)
+        print(f"PARSED_IMAGE_DETAILS={parsed_image_details}", file=output_file)
 
 if __name__ == "__main__":
     main()
